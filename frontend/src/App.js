@@ -28,6 +28,7 @@ import ShippingAddressScreen from './screens/ ShippingAddressScreen';
 import axios from 'axios';
 import {getError} from './utils';
 import Button from 'react-bootstrap/Button';
+import SearchBox from './components/SearchBox';
 
 function App() {
    const {state, dispatch:ctxDispatch} = useContext(Store);
@@ -74,16 +75,13 @@ function App() {
            <LinkContainer to ="/">
              <Navbar.Brand>Amazon</Navbar.Brand>
            </LinkContainer>
-           <Nav className ="me-auto">
+           <Navbar.Toggle aria-controls="basic-navbar-nav" />
+           <Navbar.Collapse id="basic-navbar-nav">
+             <SearchBox />
+          
+           <Nav className ="me-auto w-100 justify-content-end">
              <Link to ="/cart" className="nav-link">
                <span className="cartNav">Cart</span>
-               {/* {
-                 cart.cartItems.length>0 && (
-                 <Badge pill bg="danger">
-                   {cart.cartItems.reduce((x,y)=>x+y.quantity,0)}
-                   </Badge>
-                 )
-               } */}
                 {
                  cart.cartItems.length>0 && (
                  <span className="redCircle">
@@ -114,6 +112,7 @@ function App() {
                 <Link className="nav-link" to="/signin">Sign In</Link>
            }
                </Nav>
+            </Navbar.Collapse>
          </Container>
        </Navbar>
       </header>
