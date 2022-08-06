@@ -22,6 +22,7 @@ import {Store} from './Store';
 import CartScreen from './screens/CartScreen';
 import SigninScreen from './screens/SigninScreen';
 import SignupScreen from './screens/SignupScreen';
+import SearchScreen from './screens/SearchScreen';
 import OrderScreen from './screens/OrderScreen';
 import OrderHistoryScreen from './screens/OrderHistoryScreen';
 import ShippingAddressScreen from './screens/ ShippingAddressScreen';
@@ -29,7 +30,11 @@ import axios from 'axios';
 import {getError} from './utils';
 import Button from 'react-bootstrap/Button';
 import SearchBox from './components/SearchBox';
-
+import ProtectedRoute from './components/ProtectedRoute';
+import DashboardScreen from './screens/DashboardScreen';
+import AdminRoute from './components/AdminRoute';
+import ProductListScreen from'./screens/ProductListScreen';
+import ProductEditScreen from './screens/ProductEditScreen';
 function App() {
    const {state, dispatch:ctxDispatch} = useContext(Store);
    const {cart, userInfo} = state;
@@ -111,6 +116,22 @@ function App() {
                 :
                 <Link className="nav-link" to="/signin">Sign In</Link>
            }
+           {userInfo && userInfo.isAdmin && (
+             <NavDropdown title="Admin" id = "admin-nav-dropdown">
+               <LinkContainer to="/admin/dashboard">
+                 <NavDropdown.Item>Dashboard</NavDropdown.Item>
+               </LinkContainer>
+               <LinkContainer to="/admin/products">
+                 <NavDropdown.Item>Products</NavDropdown.Item>
+               </LinkContainer>
+               <LinkContainer to="/admin/orderlist">
+                 <NavDropdown.Item>Orders</NavDropdown.Item>
+               </LinkContainer>
+               <LinkContainer to="/admin/userlist">
+                 <NavDropdown.Item>Users</NavDropdown.Item>
+               </LinkContainer>
+             </NavDropdown>
+           )}
                </Nav>
             </Navbar.Collapse>
          </Container>
@@ -138,17 +159,22 @@ function App() {
       </div>
       <main className="mt-3 container">
         <Routes>
-        <Route path="/order/:id" element={<OrderScreen />} />
+        <Route path="/order/:id" element={<ProtectedRoute><OrderScreen /></ProtectedRoute>} />
           <Route path="/product/:slug" element={<ProductScreen />} />
           <Route path="/cart" element={<CartScreen />} />
+          <Route path="/admin/dashboard" element={<AdminRoute><DashboardScreen /></AdminRoute>} />
+          <Route path="/admin/products" element={<AdminRoute><ProductListScreen /></AdminRoute>} />
+          <Route path="/admin/products/:id" element={<AdminRoute><ProductEditScreen /></AdminRoute>} />
+          <Route path="/search" element={<SearchScreen />} />
           <Route path="/signin" element = {<SigninScreen />} />
           <Route path="/signup" element={<SignupScreen />} />
           <Route path="/shipping" element={<ShippingAddressScreen />} />
           <Route path="/placeorder" element={<PlaceOrderScreen />} />
           <Route path="/payment" element={<PaymentMethodScreen />} />
-          <Route path="/orderhistory" element={<OrderHistoryScreen />} />
-          <Route path="/profile" element = {<ProfileScreen />} />
+          <Route path="/orderhistory" element={<ProtectedRoute><OrderHistoryScreen /></ProtectedRoute>} />
+          <Route path="/profile" element = {<ProtectedRoute><ProfileScreen /></ProtectedRoute>} />
           <Route path="/" element = {<HomeScreen />} />
+                  
         </Routes>
        
       </main>
