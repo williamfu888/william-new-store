@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema(
         password: {type: String, required: true, unique: true},
         isAdmin:{type: String, required: false, unique: false},
         token:{type: String, required: false, unique: false},
+        resetToken: { type: String },
     },
     {
         timestamps: true,
